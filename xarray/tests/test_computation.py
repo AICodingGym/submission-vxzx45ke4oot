@@ -2060,3 +2060,58 @@ def test_cross(a, b, ae, be, dim: str, axis: int, use_dask: bool) -> None:
 
     actual = xr.cross(a, b, dim=dim)
     xr.testing.assert_duckarray_allclose(expected, actual)
+
+
+def test_where_keep_attrs_selects_x() -> None:
+    # GH4141/GH3891: keep_attrs=True must *select* the attrs of the second
+    # xarray input rather than merging cond/x/y attrs.
+    cond = xr.DataArray([True, False], dims="x", attrs={"attr": "cond"})
+    x = xr.DataArray([1, 2], dims="x", attrs={"attr": "x"})
+    y = xr.DataArray([30, 40], dims="x", attrs={"attr": "y"})
+
+    # default: attrs are dropped (backwards compatible)
+    assert xr.where(cond, x, y).attrs == {}
+    assert xr.where(cond, x, y, keep_attrs=False).attrs == {}
+
+    # conflicting attrs: a merging policy would raise or drop them, a
+    # selector picks x's
+    assert xr.where(cond, x, y, keep_attrs=True).attrs == {"attr": "x"}
+
+
+def test_where_keep_attrs_scalar_operand() -> None:
+    # only xarray objects contribute attrs, so with a scalar ``x`` the second
+    # xarray input (``y`` here) supplies them
+    da = xr.DataArray(1)
+    da.attrs["foo"] = "bar"
+
+    assert xr.where(da == 0, -1, da, keep_attrs=True).attrs == {"foo": "bar"}
+    assert xr.where(da == 0, -1, da, keep_attrs=False).attrs == {}
+    assert xr.where(da == 0, -1, da).attrs == {}
+
+
+def test_where_keep_attrs_global_option() -> None:
+    da = xr.DataArray(1)
+    da.attrs["foo"] = "bar"
+
+    with xr.set_options(keep_attrs=True):
+        assert xr.where(da == 0, -1, da).attrs == {"foo": "bar"}
+        # an explicit argument overrides the global option
+        assert xr.where(da == 0, -1, da, keep_attrs=False).attrs == {}
+
+    with xr.set_options(keep_attrs=False):
+        assert xr.where(da == 0, -1, da).attrs == {}
+        assert xr.where(da == 0, -1, da, keep_attrs=True).attrs == {"foo": "bar"}
+
+
+def test_where_argument_order_not_swapped() -> None:
+    # distinguishable values so an accidental reorder of cond/x/y is caught
+    cond = xr.DataArray([True, False], dims="x", attrs={"attr": "cond"})
+    x = xr.DataArray([1, 2], dims="x", attrs={"attr": "x"})
+    y = xr.DataArray([30, 40], dims="x", attrs={"attr": "y"})
+
+    for keep_attrs in [None, True, False]:
+        actual = xr.where(cond, x, y, keep_attrs=keep_attrs)
+        assert_array_equal(actual.values, [1, 40])
+
+    # dtype of the operands is not altered by keep_attrs handling
+    assert xr.where(cond, x, y, keep_attrs=True).dtype == x.dtype
