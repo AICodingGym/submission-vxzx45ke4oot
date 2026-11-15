@@ -1,0 +1,13 @@
+{
+  "width": [
+    768,
+    512,
+    384,
+    256,
+    128
+  ],
+  "bs": 32,
+  "checkpoint": true,
+  "cudnn": true,
+  "n_feat": 62
+}

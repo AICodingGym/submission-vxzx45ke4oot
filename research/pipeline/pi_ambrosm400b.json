@@ -1,0 +1,10 @@
+{
+  "n": 400,
+  "n_id_breaths": 35,
+  "breath_id_rate": 0.0875,
+  "insp_coverage_pct": 6.913620988367295,
+  "mae_trusted": 0.6368300550387828,
+  "n_PI": 25,
+  "n_P": 10,
+  "p0_k": 950
+}

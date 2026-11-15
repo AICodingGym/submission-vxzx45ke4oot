@@ -10,14 +10,19 @@ import torch.nn as nn
 
 # Original notebook units. 4060 uses a scale of these.
 PF_FULL = (768, 512, 384, 256, 128)
+PF_512 = (512, 384, 256, 192, 96)
+PF_384 = (384, 256, 192, 128, 64)
+PF_256 = (256, 192, 128, 96, 64)
 PF_MED = (192, 128, 96, 64, 48)
 PF_SMALL = (128, 96, 64, 48, 32)
 PF_TINY = (64, 48, 32, 24, 16)
+WIDTH_LADDER = [PF_FULL, PF_512, PF_384, PF_256, PF_MED, PF_SMALL]
 
 
 class PulpFictionNet(nn.Module):
-    def __init__(self, n_feat: int, lstm_units: tuple[int, ...] = PF_SMALL):
+    def __init__(self, n_feat: int, lstm_units: tuple[int, ...] = PF_SMALL, checkpoint: bool = False):
         super().__init__()
+        self.checkpoint = checkpoint
         if len(lstm_units) != 5:
             raise ValueError("need 5 LSTM widths (matches notebook x1..x5)")
         l1, l2, l3, l4, l5 = lstm_units
@@ -47,18 +52,23 @@ class PulpFictionNet(nn.Module):
     def _bn(bn: nn.BatchNorm1d, h: torch.Tensor) -> torch.Tensor:
         return bn(h.transpose(1, 2)).transpose(1, 2)
 
+    def _run(self, layer, x: torch.Tensor) -> torch.Tensor:
+        if self.checkpoint and self.training:
+            return torch.utils.checkpoint.checkpoint(lambda t: layer(t)[0], x, use_reentrant=False)
+        return layer(x)[0]
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x1, _ = self.x1(x)
-        x2, _ = self.x2(x1)
-        x3, _ = self.x3(x2)
-        x4, _ = self.x4(x3)
-        x5, _ = self.x5(x4)
-        z2, _ = self.z2(x2)
+        x1 = self._run(self.x1, x)
+        x2 = self._run(self.x2, x1)
+        x3 = self._run(self.x3, x2)
+        x4 = self._run(self.x4, x3)
+        x5 = self._run(self.x5, x4)
+        z2 = self._run(self.z2, x2)
         z31 = self._bn(self.bn3, x3 * z2)
-        z3, _ = self.z3(z31)
+        z3 = self._run(self.z3, z31)
         z41 = self._bn(self.bn4, x4 * z3)
-        z4, _ = self.z4(z41)
+        z4 = self._run(self.z4, z41)
         z51 = self._bn(self.bn5, x5 * z4)
-        z5, _ = self.z5(z51)
+        z5 = self._run(self.z5, z51)
         h = torch.cat([x5, z2, z3, z4, z5], dim=-1)
         return self.head(h).squeeze(-1)

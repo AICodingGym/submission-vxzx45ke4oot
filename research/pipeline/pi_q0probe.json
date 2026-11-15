@@ -1,0 +1,11 @@
+{
+  "n": 30,
+  "n_id": 10,
+  "id_rate": 0.3333333333333333,
+  "min_frac": 0.55,
+  "min_early": 8,
+  "median_frac": 0.9682459677419355,
+  "insp_coverage_pct": 31.02310231023102,
+  "mae_trusted": 0.0,
+  "n_trusted": 282
+}

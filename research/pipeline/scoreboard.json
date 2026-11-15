@@ -51,40 +51,24 @@
       }
     },
     "inverse_pi_neural_fallback": {
-      "status": "done",
-      "n_breaths_attempted": 67905,
-      "n_identified": 2602,
-      "insp_coverage_pct": 3.564926316320404,
-      "mae_trusted": 0.009330130969494416,
-      "nn_insp_mae": 0.25185010679368675,
-      "hybrid_insp_mae": 0.24523397231984648,
-      "delta_vs_nn": 0.006616134473840268,
-      "hard_nn": 0.27467070675429595,
-      "hard_hybrid": 0.2752961811638924,
-      "med_ms_per_breath": 6.999969482421875,
-      "runtime_sec": 468.1000716686249,
-      "p0_k": 80,
-      "unique_tol": 0.001,
-      "nn_source": "C:\\Users\\argsw\\Downloads\\dsc102\\ventilator-pressure-prediction\\research\\pipeline\\e3_oof_as_pred.npz"
+      "status": "q0_full",
+      "ensemble_snap": 0.2384087610088048,
+      "best_tau": 5.0,
+      "best_hybrid": 0.1570298843091087,
+      "best_cov": 31.201228756470904,
+      "best_mae_trusted": 0.0056779995634618375,
+      "n_id_train": 24679,
+      "min_frac": 0.55
     },
     "full_hybrid": {
-      "status": "done",
-      "protocol": "GroupKFold OOF",
-      "e3_oof": 0.25185009837150574,
-      "ensemble": 0.23933989352223858,
-      "ensemble_snap": 0.23840876100890168,
-      "e3_plus_pi": 0.24523397231984648,
-      "ensemble_plus_pi": 0.2330830085847663,
-      "ensemble_snap_plus_pi": 0.23218151045800509,
-      "hard_ensemble_snap": 0.256499585639832,
-      "hard_ensemble_snap_pi": 0.25720124610039,
-      "pi_coverage_pct": 3.564926316320404,
-      "weights": [
-        0.4771337422498183,
-        0.5228662577501817
-      ],
-      "best": "ensemble_snap_plus_pi",
-      "best_mae": 0.23218151045800509
+      "status": "q0_tau",
+      "protocol": "GroupKFold OOF + q0 PI",
+      "tau": 5.0,
+      "hybrid": 0.1570298843091087,
+      "cov": 31.201228756470904,
+      "mae_trusted": 0.0056779995634618375,
+      "hard": 0.16831325583619336,
+      "ensemble_snap": 0.2384087610088048
     }
   }
 }

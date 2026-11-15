@@ -1,0 +1,12 @@
+{
+  "file": "C:\\Users\\argsw\\Downloads\\dsc102\\ventilator-pressure-prediction\\predictions.csv",
+  "n": 603600,
+  "model": "e1+e3 snap + q0 inverse-PI tau=5.0",
+  "oof_ensemble_snap": 0.2384087610088048,
+  "oof_hybrid": 0.1570298843091087,
+  "oof_cov": 31.201228756470904,
+  "tau": 5.0,
+  "test_id_breaths": 2716,
+  "test_overlay_steps": 70561,
+  "pressure_mean": 19.38392202126444
+}
