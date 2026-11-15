@@ -1,0 +1,6 @@
+plot_model(
+    model, 
+    to_file='Google_Brain_Keras_Model.png', 
+    show_shapes=True,
+    show_layer_names=True
+)

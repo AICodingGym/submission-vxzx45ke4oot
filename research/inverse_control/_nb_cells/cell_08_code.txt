@@ -1,0 +1,8 @@
+scaler = RobustScaler()
+train = scaler.fit_transform(train)
+test = scaler.transform(test)
+
+train = train.reshape(-1, 80, train.shape[-1])
+test = test.reshape(-1, 80, train.shape[-1])
+
+print(f"train: {train.shape} \ntest: {test.shape} \ntargets: {targets.shape}")

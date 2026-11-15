@@ -1,0 +1,4 @@
+submission["pressure"] = np.median(np.vstack(test_preds),axis=0)
+submission["pressure"] = np.round((submission.pressure - P_MIN)/P_STEP) * P_STEP + P_MIN
+submission["pressure"] = np.clip(submission.pressure, P_MIN, P_MAX)
+submission.to_csv('median_submission.csv', index=False)

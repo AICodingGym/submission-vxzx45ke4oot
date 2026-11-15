@@ -1,0 +1,25 @@
+{
+  "status": "holdout_done",
+  "tag": "pf_tiny",
+  "width": [
+    64,
+    48,
+    32,
+    24,
+    16
+  ],
+  "seed": 42,
+  "protocol": "holdout 0.2 split_seed=42 train_seed=42",
+  "val_insp_mae": 0.4772493839263916,
+  "val_full_mae": 0.35347798466682434,
+  "hard50_10_mae": 0.5658988356590271,
+  "best_epoch": 40,
+  "epochs_ran": 40,
+  "sec_per_epoch": 184.51420724391937,
+  "n_feat": 62,
+  "n_tr": 54324,
+  "n_va": 13581,
+  "delta_vs_e1": -0.1964493839263916,
+  "delta_vs_e3_screen": -0.2156493839263916,
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU"
+}

@@ -1,0 +1,17 @@
+{
+  "status": "done",
+  "n_breaths_attempted": 400,
+  "n_identified": 34,
+  "insp_coverage_pct": 5.2627244276066545,
+  "mae_trusted": 0.8815825573973042,
+  "nn_insp_mae": 0.46875576605476355,
+  "hybrid_insp_mae": 0.4967540595419754,
+  "delta_vs_nn": -0.027998293487211834,
+  "hard_nn": 0.49372451382030924,
+  "hard_hybrid": 0.5355619922219828,
+  "med_ms_per_breath": 3.4977197647094727,
+  "runtime_sec": 1.3577537536621094,
+  "p0_k": 40,
+  "unique_tol": 0.001,
+  "nn_source": "C:\\Users\\argsw\\Downloads\\dsc102\\ventilator-pressure-prediction\\research\\pipeline\\stage1_pf_tiny_s42_holdout.npz"
+}

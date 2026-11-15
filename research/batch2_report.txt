@@ -1,0 +1,84 @@
+BATCH 2
+device=cuda cuda=True
+gpu=NVIDIA GeForce RTX 4060 Laptop GPU
+Loading + feature engineering...
+feat shape=(5432400, 31) sec=13.2
+Best-known (frozen reference): {'name': 'sanity_bilstm_full_60ep', 'val_insp_mae': 0.3747}
+Resuming: loaded E1/E4 from batch2_e1e4.json
+E1 follow-up: fixed-LR memorization probe (schedule=none)...
+E1 follow-up fixed LR: best_train=0.1546 ep=184
+
+========================================================================
+E2: PUSH SEQUENCE MODEL (schedule / loss / size)
+H: underfit; plateau sched + better loss/scale/size beats 0.375.
+========================================================================
+E2 using E1-informed y_scale=True loss_hint=mse lr_hint=0.01
+E2 baseline_cos_mae_noscale_h256: val=0.2916 train=0.2357 hard=0.3079 ep=79
+E2 plateau_mae_scale: val=0.2572 train=0.2042 hard=0.2741 ep=89
+E2 plateau_mse_scale: val=0.2627 train=0.2032 hard=0.2815 ep=89
+E2 plateau_huber_scale: val=0.2511 train=0.1877 hard=0.2651 ep=82
+E2 plateau_mse_scale_lr3e3: val=0.2489 train=0.1842 hard=0.2716 ep=79
+E2 plateau_mae_scale_hardw3: val=0.2605 train=0.2118 hard=0.2648 ep=90
+E2 best screen: plateau_mse_scale_lr3e3 val=0.2489 (prior best-known 0.3747)
+
+========================================================================
+E3: ARCHITECTURE / INPUT CHANGES
+H: conv/attention + richer hist feats help overall and especially R=50,C=10.
+========================================================================
+E3 bilstm_rich_feats: val=0.2389 train=0.1671 hard=0.2646
+E3 conv_bilstm_rich: val=0.2839 train=0.1909 hard=0.3248
+E3 attn_bilstm_rich: val=0.2670 train=0.1818 hard=0.2910
+E3 conv_bilstm_rich_hardw3: val=0.2993 train=0.2065 hard=0.3258
+E3 best: bilstm_rich_feats val=0.2389
+
+========================================================================
+E5: ENSEMBLING + GROUPED K-FOLD FINALIST
+H: tree/LSTM errors partly complementary; blends can win; finalize with GroupKFold.
+========================================================================
+Using E3 model as NN side: bilstm_rich_feats val=0.2389
+E5 tree (insp-rows, insp-ES) val MAE=0.7084 iter=800
+E5 NN aligned val MAE=0.2389
+E5 inspiratory error correlation tree vs NN: 0.3160
+  blend weighted_nn1.0: MAE=0.2389
+  blend weighted_nn0.9: MAE=0.2498
+  blend weighted_nn0.8: MAE=0.2807
+  blend weighted_nn0.7: MAE=0.3220
+  blend weighted_nn0.6: MAE=0.3693
+  blend weighted_nn0.5: MAE=0.4206
+  blend mean: MAE=0.4206
+  blend median: MAE=0.4206
+  blend weighted_nn0.4: MAE=0.4747
+  blend weighted_nn0.3: MAE=0.5310
+  blend weighted_nn0.2: MAE=0.5889
+  blend weighted_nn0.1: MAE=0.6481
+  blend weighted_nn0.0: MAE=0.7084
+E5 best blend on holdout: {'method': 'weighted_nn1.0', 'w_nn': 1.0, 'mae': 0.23893257771104656}
+E5 finalist type: single_nn_or_tree
+E5 GroupKFold K=5 for NN finalist kind=bilstm cols=27 loss=mse y_scale=True lr=0.003
+E5 fold1: val=0.2642 hard=0.2892 train=0.1984
+E5 fold2: val=0.2449 hard=0.2628 train=0.1757
+E5 fold3: val=0.2260 hard=0.2339 train=0.1554
+E5 fold4: val=0.2804 hard=0.3128 train=0.2235
+E5 fold5: val=0.2375 hard=0.2552 train=0.1625
+E5 NN GroupKFold OOF insp MAE=0.2506 hard50_10=0.2706
+E5 fold mean±std: 0.2506 ± 0.0194
+E5 tree GroupKFold OOF...
+E5 tree fold1: val=0.7348
+E5 tree fold2: val=0.7340
+E5 tree fold3: val=0.7393
+E5 tree fold4: val=0.7389
+E5 tree fold5: val=0.7385
+E5 tree GroupKFold OOF MAE=0.7371
+E5 OOF mean blend=0.4372 median=0.4372 best_w={'w_nn': 1.0, 'mae': 0.25060967529791944}
+
+========================================================================
+BATCH 2 SUMMARY
+========================================================================
+Frozen prior best-known: 0.3747
+E2 best screen val: 0.2489 (plateau_mse_scale_lr3e3)
+E3 best screen val: 0.2389 (bilstm_rich_feats)
+E5 NN GroupKFold OOF: 0.2506
+E5 tree GroupKFold OOF: 0.7371
+E5 best OOF blend: {'w_nn': 1.0, 'mae': 0.25060967529791944}
+Finalist OOF MAE (min NN/tree/blend): 0.2506
+NEW best-known (by GroupKFold OOF / comparable protocol).

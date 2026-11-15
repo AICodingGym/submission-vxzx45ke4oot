@@ -1,0 +1,94 @@
+========================================================================
+1. NATURAL UNIT & TEMPORAL STRUCTURE
+========================================================================
+train rows=5,432,400 breaths=67,905
+test  rows=603,600 breaths=7,545
+steps/breath train unique sizes: [80]
+steps/breath test unique sizes: [80]
+dt median=0.033452 mean=0.033097 std=0.001216 q01=0.031593 q99=0.035220
+inspiratory steps: min=25 max=32 mean=30.36 median=30.0 unique=[np.int64(25), np.int64(26), np.int64(28), np.int64(29), np.int64(30), np.int64(31), np.int64(32)]... nunique=7
+expiratory steps: min=48 max=55 mean=49.64
+scored fraction (u_out==0): 0.3796
+u_out switches/breath: value_counts={1: 67905}
+max unique R/C within breath: {'R': 1, 'C': 1}
+
+========================================================================
+2. PRESSURE DISCRETIZATION
+========================================================================
+n unique pressure values: 950
+min positive unique-diff: 0.0703021400
+median/mean unique-diff: 0.0703021460 / 0.0703021455
+approx lattice step via gcd: 1/1000000 = 0.0000010000
+all unique on estimated lattice? True
+pressure min/max: -1.895744 / 64.820992
+top 10 most common pressures:
+pressure
+6.399909    178640
+6.470211    169895
+6.259305    162312
+6.329607    162234
+6.610815    147921
+6.540513    147498
+6.189002    145939
+6.681117    133132
+6.118700    115139
+6.751420    111480
+
+========================================================================
+3. PREDICTABILITY: CURRENT vs HISTORY (inspiratory MAE)
+========================================================================
+B0 global insp mean MAE: 7.6207
+B1 mean by (R,C) MAE: 7.4957
+B2 current (R,C,u_out,u_in/10bins) MAE: 6.7547
+B2 current (R,C,u_out,u_in/20bins) MAE: 6.6628
+B2 current (R,C,u_out,u_in/50bins) MAE: 6.5363
+B3 current+timebin (R,C,u_out,t,u) MAE: 4.7467
+L1 linear current-only (R,C,u_in,u_out,t) MAE: 3.6238
+L2 linear +lags MAE: 3.1698
+L3 linear +cumsum/cummax MAE: 3.0583
+L3b linear +hist trained on ALL phases MAE: 5.4562
+Oracle: predict p_lag1 (persistence) insp MAE: 1.4237
+
+========================================================================
+4. RESPONSE CONSISTENCY FOR SIMILAR CONTROLS
+========================================================================
+fingerprints with >=2 breaths (among 8000 sampled): 1
+within-fingerprint pressure MAE to mean traj: mean=1.4252 median=1.0233 p90=2.1723 n=9
+Checking exact duplicate control sequences (rounded u_in to 3dp, same R,C)...
+exact (R,C,u_in@3dp) duplicates: 0 groups
+No exact duplicates found in sample.
+
+========================================================================
+5. SIMPLIFIED PHYSICAL / DYNAMICAL MODELS
+========================================================================
+P1 physics-inspired linear (insp-train) MAE: 3.8611
+P2 open-loop ARX per (R,C) MAE: 2.9125
+
+========================================================================
+6. DIFFICULTY BY R/C AND BREATH PHASE
+========================================================================
+MAE by (R,C) for L3 linear+hist:
+C         10        20        50
+R                               
+5   2.785271  2.487179  1.766651
+20  2.432072  2.671197  2.234748
+50  3.516166  4.611280  4.288276
+MAE by step index (inspiratory only), selected steps:
+  step 0: MAE=2.4679
+  step 1: MAE=3.3270
+  step 2: MAE=2.8948
+  step 5: MAE=3.0422
+  step 10: MAE=3.0457
+  step 15: MAE=3.0039
+  step 20: MAE=2.9987
+  step 25: MAE=3.1598
+  step 30: MAE=3.8235
+early vs late insp MAE: {'early_insp': 2.939973848477653, 'late_insp': 3.173873919153892}
+MAE by u_in quintile:
+u_q
+(-0.001, 1.164]     3.254347
+(1.164, 5.042]      2.813018
+(5.042, 10.308]     2.764345
+(10.308, 22.907]    3.115814
+(22.907, 100.0]     3.343926
+corr(|err|, |dp|): 0.2248

@@ -1,0 +1,38 @@
+{
+  "hypothesis": "inverse P controller (AmbrosM); grids from writeup",
+  "subset": {
+    "n_breaths": 4000,
+    "train": 3200,
+    "val": 800
+  },
+  "train_ident": {
+    "p_grid_ok_breaths": 3195,
+    "frac_ok": 0.9984375,
+    "mean_hit_frac_ok": 1.0,
+    "mean_linear_r2": 0.43739240274191843,
+    "coverage_trusted_steps": 0.8420138226259464,
+    "mae_on_trusted_steps": 2.96793577206648
+  },
+  "val_uin_only": {
+    "tag": "uin_only_lattice",
+    "insp_step_coverage_pct": 83.67296529578856,
+    "mae_on_trusted_steps": 1647.8673095703125,
+    "hybrid_mean_fallback_mae": 1380.387939453125,
+    "all_insp_mae_where_pred_finite": NaN,
+    "n_trusted_steps": 20325,
+    "n_insp_steps": 24291
+  },
+  "val_oracle_id": {
+    "tag": "oracle_label_id_eval_only",
+    "insp_step_coverage_pct": 83.67296529578856,
+    "mae_on_trusted_steps": 3.424838066101074,
+    "hybrid_mean_fallback_mae": 4.434092044830322,
+    "all_insp_mae_where_pred_finite": NaN,
+    "n_trusted_steps": 20325,
+    "n_insp_steps": 24291
+  },
+  "warning": "uin_only lattice self-check can false-positive; use oracle block as ID ceiling",
+  "vs_neural_baseline_note": "Batch2 OOF 0.2506; this PoC is NOT comparable (subset, P-only, mean fallback)",
+  "runtime_sec": 9.502368450164795,
+  "next_pi": "deferred pending review; T=0.5 hypothesis from writeup"
+}

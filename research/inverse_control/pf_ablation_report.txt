@@ -1,0 +1,10 @@
+Pulp Fiction feature ablations — holdout screen (not OOF)
+Control e1_baseline holdout insp MAE 0.2808  hard50/10 0.3119
+e3_aug_uin screen (not this recipe) 0.2616
+
+pf_lagback: val=0.2881  hard=0.3165  ep=69  n_feat=31  Δ vs e1=-0.0074  sec=4814
+  cols extra: ['u_in_lag_back1', 'u_in_lag_back2', 'u_in_lagback_diff1', 'u_in_lagback_diff2']
+pf_rc_onehot: val=0.2605  hard=0.2847  ep=66  n_feat=40  Δ vs e1=+0.0202  sec=4839
+  cols extra: ['R_5', 'R_20', 'R_50', 'C_10', 'C_20', 'C_50', 'RC_5_10', 'RC_5_20', 'RC_5_50', 'RC_20_10', 'RC_20_20', 'RC_20_50', 'RC_50_10', 'RC_50_20', 'RC_50_50']
+
+Holdout only. No GroupKFold, no gym submit, no 7-model clone.

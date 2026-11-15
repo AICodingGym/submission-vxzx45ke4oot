@@ -1,0 +1,18 @@
+{
+  "file": "C:\\Users\\argsw\\Downloads\\dsc102\\ventilator-pressure-prediction\\predictions.csv",
+  "n": 603600,
+  "model": "e1+e3 inv-MAE weighted 5-fold means, lattice snap",
+  "oof_mae": 0.2384,
+  "weights": {
+    "e1": 0.4771337422498183,
+    "e3": 0.5228662577501817
+  },
+  "pressure_mean": 19.385226093601435,
+  "variants_test_mean": {
+    "e3_foldmean": 19.268037796020508,
+    "e1_foldmean": 19.513612747192383,
+    "inv_mae_weighted": 19.385210037231445,
+    "inv_mae_weighted_snap": 19.385226093601435
+  },
+  "note": "Selected by GroupKFold OOF (ensemble 0.2393, snap 0.2384). No LB tuning."
+}

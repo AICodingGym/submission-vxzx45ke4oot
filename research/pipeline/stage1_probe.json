@@ -1,0 +1,17 @@
+{
+  "sec_per_epoch_subset": 53.844762325286865,
+  "subset_train_breaths": 4800,
+  "est_sec_per_epoch_full": 609.3880976164342,
+  "est_holdout_60ep_min": 609.3880976164342,
+  "params_M": 0.264289,
+  "n_feat": 62,
+  "width": [
+    64,
+    48,
+    32,
+    24,
+    16
+  ],
+  "best_insp_subset": 2.034789800643921,
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU"
+}

@@ -1,0 +1,3 @@
+submission = pd.read_csv('../input/ventilator-pressure-prediction/sample_submission.csv')
+submission["pressure"] = sum(test_preds)/5
+submission.to_csv('mean_submission.csv', index=False)

@@ -1,0 +1,2 @@
+model = dnn_model()
+model.summary()

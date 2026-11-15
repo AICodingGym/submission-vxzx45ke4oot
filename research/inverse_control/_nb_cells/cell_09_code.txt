@@ -1,0 +1,12 @@
+pressure = targets.squeeze().reshape(-1,1).astype('float32')
+
+P_MIN = np.min(pressure)
+P_MAX = np.max(pressure)
+P_STEP = (pressure[1] - pressure[0])[0]
+print('Min pressure: {}'.format(P_MIN))
+print('Max pressure: {}'.format(P_MAX))
+print('Pressure step: {}'.format(P_STEP))
+print('Unique values:  {}'.format(np.unique(pressure).shape[0]))
+
+del pressure
+gc.collect()

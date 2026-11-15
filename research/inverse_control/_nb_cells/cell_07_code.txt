@@ -1,0 +1,11 @@
+targets = train[['pressure']].to_numpy().reshape(-1, 80)
+
+train.drop(['pressure','id', 'breath_id','one','count',
+            'breath_id_lag','breath_id_lag2','breath_id_lagsame',
+            'breath_id_lag2same'], axis=1, inplace=True)
+
+test = test.drop(['id', 'breath_id','one','count','breath_id_lag',
+                  'breath_id_lag2','breath_id_lagsame',
+                  'breath_id_lag2same'], axis=1)
+
+print(f"train: {train.shape} \ntest: {test.shape}")

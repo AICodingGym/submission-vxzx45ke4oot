@@ -1,0 +1,17 @@
+{
+  "e3_oof": 0.25185009837150574,
+  "ensemble": 0.23933989352223858,
+  "ensemble_snap": 0.23840876100890168,
+  "e3_plus_pi": 0.24523397231984648,
+  "ensemble_plus_pi": 0.2330830085847663,
+  "ensemble_snap_plus_pi": 0.23218151045800509,
+  "hard_ensemble_snap": 0.256499585639832,
+  "hard_ensemble_snap_pi": 0.25720124610039,
+  "pi_coverage_pct": 3.564926316320404,
+  "weights": [
+    0.4771337422498183,
+    0.5228662577501817
+  ],
+  "best": "ensemble_snap_plus_pi",
+  "best_mae": 0.23218151045800509
+}

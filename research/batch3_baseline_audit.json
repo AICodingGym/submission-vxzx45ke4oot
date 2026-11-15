@@ -1,0 +1,56 @@
+{
+  "batch2_reference": {
+    "groupkfold_oof_mae": 0.2506,
+    "holdout_insp_mae": 0.23893257975578308,
+    "holdout_hard50_10_mae": 0.26460716128349304,
+    "recipe": {
+      "model": "BiLSTMReg",
+      "cols": "SEQ_COLS_RICH",
+      "hidden": 256,
+      "layers": 3,
+      "loss": "mse",
+      "schedule": "plateau",
+      "y_scale": true,
+      "lr": 0.003,
+      "epochs": 90,
+      "hard_weight": 1.0,
+      "amp": false,
+      "split": {
+        "val_frac": 0.2,
+        "seed": 42
+      },
+      "train_seed": 42
+    },
+    "source": "batch2_results.json E3 best + E5 kfold_nn"
+  },
+  "batch3_e1_screen": {
+    "val_insp_mae": 0.2807616591453552,
+    "hard50_10_mae": 0.3119116723537445,
+    "best_epoch": 72,
+    "recipe": {
+      "name": "baseline",
+      "multitask": false,
+      "residual": false,
+      "augment": "none",
+      "hybrid_physics": false,
+      "epochs": 75,
+      "lr": 0.003,
+      "loss": "mse"
+    },
+    "split": {
+      "val_frac": 0.2,
+      "seed": 42
+    },
+    "train_amp": true
+  },
+  "known_deltas_vs_batch2_holdout": {
+    "holdout_mae": 0.041829079389572144,
+    "hard50_10_mae": 0.047304511070251465
+  },
+  "fairness_notes": [
+    "Holdout split should match Batch 2 if val_frac=0.2 and split_seed=42 (breath_split).",
+    "Batch 3 e1 uses epochs=75 and AMP; Batch 2 finalist holdout used epochs=90 and no AMP.",
+    "OOF 0.2506 is GroupKFold on full train; screening holdout is a single 80/20 split.",
+    "Use batch3 replay (no AMP, 90 ep) below for apples-to-apples holdout check."
+  ]
+}

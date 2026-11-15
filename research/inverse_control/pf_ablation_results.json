@@ -1,0 +1,68 @@
+{
+  "protocol": "Batch3 e1 screen: holdout 20% breath_split seed 42, 75ep AMP mse y-scale BiLSTM 256x3",
+  "control_e1_baseline": {
+    "val_insp_mae": 0.2807616591453552,
+    "hard50_10_mae": 0.3119116723537445
+  },
+  "reference_e3_aug_uin_screen": {
+    "val_insp_mae": 0.2615533471107483
+  },
+  "runs": {
+    "pf_lagback": {
+      "done": true,
+      "val_insp_mae": 0.2881139814853668,
+      "hard50_10_mae": 0.3165028393268585,
+      "best_epoch": 69,
+      "best_train": 0.22959332168102264,
+      "n_feat": 31,
+      "n_tr": 54324,
+      "n_va": 13581,
+      "runtime_sec": 4813.781093835831,
+      "stopping_reason": "max_epochs",
+      "delta_vs_e1": -0.007352322340011597,
+      "extra_cols": [
+        "u_in_lag_back1",
+        "u_in_lag_back2",
+        "u_in_lagback_diff1",
+        "u_in_lagback_diff2"
+      ],
+      "dropped_vs_rich": [],
+      "note": "future u_in within breath (known at test; not label leak)"
+    },
+    "pf_rc_onehot": {
+      "done": true,
+      "val_insp_mae": 0.2605494260787964,
+      "hard50_10_mae": 0.2846922278404236,
+      "best_epoch": 66,
+      "best_train": 0.1930837780237198,
+      "n_feat": 40,
+      "n_tr": 54324,
+      "n_va": 13581,
+      "runtime_sec": 4838.658115148544,
+      "stopping_reason": "max_epochs",
+      "delta_vs_e1": 0.020212233066558838,
+      "extra_cols": [
+        "R_5",
+        "R_20",
+        "R_50",
+        "C_10",
+        "C_20",
+        "C_50",
+        "RC_5_10",
+        "RC_5_20",
+        "RC_5_50",
+        "RC_20_10",
+        "RC_20_20",
+        "RC_20_50",
+        "RC_50_10",
+        "RC_50_20",
+        "RC_50_50"
+      ],
+      "dropped_vs_rich": [
+        "R",
+        "C"
+      ],
+      "note": "replace numeric R,C with R/C/RC one-hots; keep physics products"
+    }
+  }
+}

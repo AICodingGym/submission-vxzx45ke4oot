@@ -1,0 +1,52 @@
+{
+  "unique_pressures": 950,
+  "unique_tol": 0.001,
+  "p_tight": {
+    "n_breaths": 1200,
+    "train_ok": 20,
+    "train_n": 960,
+    "val_oracle": {
+      "insp_coverage_pct": 12.534284147010423,
+      "n_trusted": 914,
+      "n_insp": 7292,
+      "mae_trusted": 7.1828948062565985,
+      "hybrid_mean_fallback_mae": 7.439793580557112
+    },
+    "val_uin_only": {
+      "insp_coverage_pct": 2.029621503017005,
+      "n_trusted": 148,
+      "n_insp": 7292,
+      "mae_trusted": 0.11875362408783785,
+      "hybrid_mean_fallback_mae": 7.279030177814752
+    }
+  },
+  "pi": {
+    "T": 0.5,
+    "n_breaths": 400,
+    "train_oracle_ok": 26,
+    "train_n": 320,
+    "train_mae_ok": 0.03716530620024741,
+    "val_oracle": {
+      "insp_coverage_pct": 15.854665565648224,
+      "n_trusted": 384,
+      "n_insp": 2422,
+      "mae_trusted": 0.10874863128125001,
+      "hybrid_mean_fallback_mae": 6.005180366485264
+    },
+    "val_uin_only": {
+      "insp_coverage_pct": 8.464079273327828,
+      "n_trusted": 205,
+      "n_insp": 2422,
+      "mae_trusted": 0.0013717491804878074,
+      "hybrid_mean_fallback_mae": 6.587679399115339
+    },
+    "val_infer_breaths": 7
+  },
+  "neural_ref": {
+    "batch2_oof": 0.2506,
+    "batch2_holdout": 0.2389,
+    "batch3_screen_best": 0.2616
+  },
+  "runtime_sec": 792.5961329936981,
+  "note": "Subset PoC; not comparable to GroupKFold OOF. Mean fallback is not the NN."
+}

@@ -1,0 +1,61 @@
+{
+  "E0_arx": {
+    "mae": 2.9137728438490877
+  },
+  "E1": {
+    "mae": 0.8556134665364393,
+    "best_iter": 400,
+    "device": "cpu",
+    "label": "lgbm_hist_insp_w"
+  },
+  "E2a": {
+    "mae": 0.9225553875754052,
+    "best_iter": 400,
+    "device": "cpu",
+    "label": "lgbm_all_phase"
+  },
+  "E2b": {
+    "mae": 6.843599119932365,
+    "best_iter": 1,
+    "device": "cpu",
+    "label": "lgbm_insp_rows_only"
+  },
+  "E3a": {
+    "mae": 1.0696073770523071,
+    "device": "cuda",
+    "label": "bilstm_insp_loss"
+  },
+  "E3b": {
+    "mae": 1.1931593418121338,
+    "device": "cuda",
+    "label": "bilstm_all_loss"
+  },
+  "E4_tree": {
+    "raw": 0.8556134665364393,
+    "nearest_unique": 0.8551074621610797,
+    "step_round": 0.8552718569732549
+  },
+  "E4_bilstm": {
+    "raw": 1.0696073770523071,
+    "nearest_unique": 1.0694050579518946,
+    "step_round": 1.0694032056534244
+  },
+  "E5a": {
+    "mae": 0.8556134665364393,
+    "best_iter": 400,
+    "device": "cpu",
+    "label": "lgbm_base_insp_weighted"
+  },
+  "E5b": {
+    "mae": 0.8505446350343165,
+    "best_iter": 400,
+    "device": "cpu",
+    "label": "lgbm_phys_insp_weighted"
+  },
+  "ensemble_mean": {
+    "mae": 0.8803942677149467,
+    "err_corr": 0.6533806717939843,
+    "tree": 0.8556134639564777,
+    "lstm": 1.0696074880336903
+  }
+}

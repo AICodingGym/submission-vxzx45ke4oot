@@ -1,0 +1,90 @@
+{
+  "tracks": {
+    "original_bilstm": {
+      "protocol": "GroupKFold K=5 seed 42",
+      "oof_insp_mae": 0.2519,
+      "name": "e3_aug_uin",
+      "batch2_fallback_oof": 0.2506
+    },
+    "pf_neural": {
+      "status": "holdout_done",
+      "tag": "pf_tiny",
+      "width": [
+        64,
+        48,
+        32,
+        24,
+        16
+      ],
+      "seed": 42,
+      "protocol": "holdout 0.2 split_seed=42 train_seed=42",
+      "val_insp_mae": 0.4772493839263916,
+      "val_full_mae": 0.35347798466682434,
+      "hard50_10_mae": 0.5658988356590271,
+      "best_epoch": 40,
+      "epochs_ran": 40,
+      "sec_per_epoch": 184.51420724391937,
+      "n_feat": 62,
+      "n_tr": 54324,
+      "n_va": 13581,
+      "delta_vs_e1": -0.1964493839263916,
+      "delta_vs_e3_screen": -0.2156493839263916,
+      "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU"
+    },
+    "neural_ensemble": {
+      "status": "done",
+      "protocol": "GroupKFold OOF aligned e1_baseline + e3_aug_uin",
+      "members": {
+        "e1": 0.2759895324707031,
+        "e3": 0.25185009837150574
+      },
+      "best": "inv_mae_weighted",
+      "best_mae": 0.23933989352223858,
+      "methods": {
+        "mean": 0.239912211894989,
+        "median": 0.239912211894989,
+        "btm_0.25": 0.239912211894989,
+        "btm_0.45": 0.239912211894989,
+        "btm_0.70": 0.239912211894989,
+        "inlier_mean_0.45": 0.23991222978369356,
+        "inv_mae_weighted": 0.23933989352223858
+      }
+    },
+    "inverse_pi_neural_fallback": {
+      "status": "done",
+      "n_breaths_attempted": 67905,
+      "n_identified": 2602,
+      "insp_coverage_pct": 3.564926316320404,
+      "mae_trusted": 0.009330130969494416,
+      "nn_insp_mae": 0.25185010679368675,
+      "hybrid_insp_mae": 0.24523397231984648,
+      "delta_vs_nn": 0.006616134473840268,
+      "hard_nn": 0.27467070675429595,
+      "hard_hybrid": 0.2752961811638924,
+      "med_ms_per_breath": 6.999969482421875,
+      "runtime_sec": 468.1000716686249,
+      "p0_k": 80,
+      "unique_tol": 0.001,
+      "nn_source": "C:\\Users\\argsw\\Downloads\\dsc102\\ventilator-pressure-prediction\\research\\pipeline\\e3_oof_as_pred.npz"
+    },
+    "full_hybrid": {
+      "status": "done",
+      "protocol": "GroupKFold OOF",
+      "e3_oof": 0.25185009837150574,
+      "ensemble": 0.23933989352223858,
+      "ensemble_snap": 0.23840876100890168,
+      "e3_plus_pi": 0.24523397231984648,
+      "ensemble_plus_pi": 0.2330830085847663,
+      "ensemble_snap_plus_pi": 0.23218151045800509,
+      "hard_ensemble_snap": 0.256499585639832,
+      "hard_ensemble_snap_pi": 0.25720124610039,
+      "pi_coverage_pct": 3.564926316320404,
+      "weights": [
+        0.4771337422498183,
+        0.5228662577501817
+      ],
+      "best": "ensemble_snap_plus_pi",
+      "best_mae": 0.23218151045800509
+    }
+  }
+}

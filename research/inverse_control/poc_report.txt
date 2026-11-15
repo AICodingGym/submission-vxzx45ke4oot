@@ -1,0 +1,8 @@
+INVERSE P-CONTROLLER PoC (subset)
+max_breaths=4000 split seed=42
+Train breaths: 3200; P-grid ok (≥50% lattice hits): 3195
+
+Val ORACLE ID — coverage 83.7%, MAE trusted 3.4248, hybrid 4.4341
+Val U_IN only — coverage 83.7%, MAE trusted 1647.8673 (unreliable if MAE huge)
+Train P-ID ok breaths: 3195/3200
+Runtime: 9.5s

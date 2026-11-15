@@ -1,0 +1,336 @@
+{
+  "protocol": "screen_holdout_then_cv",
+  "screen_split": {
+    "val_frac": 0.2,
+    "seed": 42
+  },
+  "screening": {
+    "e1_baseline": {
+      "result_type": "SCREENING",
+      "split": "holdout val_frac=0.2 split_seed=42",
+      "train_seed": 42,
+      "done": true,
+      "val_insp_mae": 0.2807616591453552,
+      "hard50_10_mae": 0.3119116723537445,
+      "best_epoch": 72,
+      "recipe": {
+        "name": "baseline",
+        "multitask": false,
+        "residual": false,
+        "augment": "none",
+        "hybrid_physics": false,
+        "epochs": 75,
+        "lr": 0.003,
+        "loss": "mse"
+      },
+      "promote_to_cv": true,
+      "promote_reason": "control (always CV)"
+    },
+    "e2_multitask": {
+      "result_type": "SCREENING",
+      "split": "holdout val_frac=0.2 split_seed=42",
+      "train_seed": 42,
+      "done": true,
+      "val_insp_mae": 0.3531084954738617,
+      "hard50_10_mae": 0.4153549373149872,
+      "best_epoch": 67,
+      "recipe": {
+        "name": "multitask",
+        "multitask": true,
+        "residual": false,
+        "augment": "none",
+        "hybrid_physics": false,
+        "epochs": 75,
+        "lr": 0.003,
+        "loss": "mse"
+      },
+      "promote_to_cv": true,
+      "promote_reason": "control (always CV)"
+    },
+    "e3_aug_none": {
+      "result_type": "SCREENING",
+      "split": "holdout val_frac=0.2 split_seed=42",
+      "train_seed": 42,
+      "done": true,
+      "val_insp_mae": 0.2807616591453552,
+      "hard50_10_mae": 0.3119116723537445,
+      "best_epoch": 72,
+      "recipe": {
+        "name": "aug_none",
+        "multitask": false,
+        "residual": false,
+        "augment": "none",
+        "hybrid_physics": false,
+        "epochs": 75,
+        "lr": 0.003,
+        "loss": "mse"
+      },
+      "promote_to_cv": true,
+      "promote_reason": "top-3 screening (#1 by val MAE, exploratory CV)"
+    },
+    "e3_aug_uin": {
+      "result_type": "SCREENING",
+      "split": "holdout val_frac=0.2 split_seed=42",
+      "train_seed": 42,
+      "done": true,
+      "val_insp_mae": 0.2615533471107483,
+      "hard50_10_mae": 0.2837381660938263,
+      "best_epoch": 64,
+      "recipe": {
+        "name": "aug_uin",
+        "multitask": false,
+        "residual": false,
+        "augment": "uin_noise",
+        "hybrid_physics": false,
+        "epochs": 75,
+        "lr": 0.003,
+        "loss": "mse"
+      },
+      "promote_to_cv": true,
+      "promote_reason": "overall \u0394=0.0192 (\u22650.005); hard50_10 \u0394=0.0282 (\u22650.005)"
+    },
+    "e3_aug_mask": {
+      "result_type": "SCREENING",
+      "split": "holdout val_frac=0.2 split_seed=42",
+      "train_seed": 42,
+      "done": true,
+      "val_insp_mae": 0.3444000780582428,
+      "hard50_10_mae": 0.36758953332901,
+      "best_epoch": 75,
+      "recipe": {
+        "name": "aug_mask",
+        "multitask": false,
+        "residual": false,
+        "augment": "feat_mask",
+        "hybrid_physics": false,
+        "epochs": 75,
+        "lr": 0.003,
+        "loss": "mse"
+      },
+      "promote_to_cv": false,
+      "promote_reason": "screen \u0394 overall +0.0636 (threshold 0.005)"
+    },
+    "e4_residual": {
+      "result_type": "SCREENING",
+      "split": "holdout val_frac=0.2 split_seed=42",
+      "train_seed": 42,
+      "done": true,
+      "val_insp_mae": 0.3370324969291687,
+      "hard50_10_mae": 0.4002213180065155,
+      "best_epoch": 83,
+      "recipe": {
+        "name": "residual",
+        "multitask": false,
+        "residual": true,
+        "augment": "none",
+        "hybrid_physics": false,
+        "epochs": 85,
+        "lr": 0.003,
+        "loss": "mse"
+      },
+      "promote_to_cv": true,
+      "promote_reason": "top-3 screening (#3 by val MAE, exploratory CV)",
+      "stopping_reason": "full_85ep_budget",
+      "less_than_full_budget": false,
+      "learning_curve_note": "batch3_e4_curve_report.txt"
+    },
+    "e5_hybrid": {
+      "result_type": "SCREENING",
+      "split": "holdout val_frac=0.2 split_seed=42",
+      "train_seed": 42,
+      "done": true,
+      "val_insp_mae": 0.3307526707649231,
+      "hard50_10_mae": 0.39976033568382263,
+      "best_epoch": 72,
+      "recipe": {
+        "hybrid_physics": true
+      },
+      "promote_to_cv": true,
+      "promote_reason": "top-3 screening (#2 by val MAE, exploratory CV)",
+      "phys_only_mae": 4.259822368621826
+    }
+  },
+  "cv_queue": [
+    "e1_baseline",
+    "e2_multitask",
+    "e3_aug_none",
+    "e3_aug_uin",
+    "e4_residual",
+    "e5_hybrid"
+  ],
+  "cv_results": {
+    "e1_baseline": {
+      "complete": true,
+      "oof_mae": 0.2759895324707031,
+      "seed_mean": 0.2759895324707031,
+      "seed_std": 0.0,
+      "fold_mean": 0.27599148750305175,
+      "fold_std": 0.017779000962192086,
+      "per_seed_mae": [
+        0.2759895324707031
+      ],
+      "seeds": [
+        42
+      ],
+      "oof_npz": "batch3_oof_e1_baseline.npz",
+      "fold_scores": [
+        0.287520170211792,
+        0.2515839636325836,
+        0.2950209677219391,
+        0.28825876116752625,
+        0.25757357478141785
+      ],
+      "n_folds": 5,
+      "selection_note": "Compare OOF vs Batch2 0.2506; do not use leaderboard for selection",
+      "oof_mae_primary": 0.2759895324707031,
+      "result_type": "GROUP_KFOLD_CV"
+    },
+    "e3_aug_uin": {
+      "complete": true,
+      "oof_mae": 0.25185009837150574,
+      "seed_mean": 0.25185009837150574,
+      "seed_std": 0.0,
+      "fold_mean": 0.2518497586250305,
+      "fold_std": 0.004128293023293475,
+      "per_seed_mae": [
+        0.25185009837150574
+      ],
+      "seeds": [
+        42
+      ],
+      "oof_npz": "batch3_oof_e3_aug_uin.npz",
+      "fold_scores": [
+        0.2447643280029297,
+        0.2526467442512512,
+        0.2554057240486145,
+        0.25621578097343445,
+        0.25021621584892273
+      ],
+      "n_folds": 5,
+      "selection_note": "Compare OOF vs Batch2 0.2506; do not use leaderboard for selection",
+      "oof_mae_primary": 0.25185009837150574,
+      "result_type": "GROUP_KFOLD_CV"
+    }
+  },
+  "promotions": {
+    "e1_baseline": {
+      "promote": true,
+      "reason": "control (always CV)"
+    },
+    "e2_multitask": {
+      "promote": true,
+      "reason": "control (always CV)"
+    },
+    "e3_aug_none": {
+      "promote": true,
+      "reason": "top-3 screening (#1 by val MAE, exploratory CV)"
+    },
+    "e3_aug_uin": {
+      "promote": true,
+      "reason": "overall \u0394=0.0192 (\u22650.005); hard50_10 \u0394=0.0282 (\u22650.005)"
+    },
+    "e3_aug_mask": {
+      "promote": false,
+      "reason": "screen \u0394 overall +0.0636 (threshold 0.005)"
+    },
+    "e4_residual": {
+      "promote": true,
+      "reason": "top-3 screening (#3 by val MAE, exploratory CV)"
+    },
+    "e5_hybrid": {
+      "promote": true,
+      "reason": "top-3 screening (#2 by val MAE, exploratory CV)"
+    }
+  },
+  "protocol_notes": {
+    "promote_delta": 0.005,
+    "top_k_explore": 3,
+    "cv_controls": [
+      "e1_baseline",
+      "e2_multitask"
+    ],
+    "phase2_seeds_default": [
+      42
+    ],
+    "no_auto_multi_seed": true,
+    "final_model_by_oof_only": true,
+    "single_gym_submit": true
+  },
+  "baseline_audit": {
+    "batch2_reference": {
+      "groupkfold_oof_mae": 0.2506,
+      "holdout_insp_mae": 0.23893257975578308,
+      "holdout_hard50_10_mae": 0.26460716128349304,
+      "recipe": {
+        "model": "BiLSTMReg",
+        "cols": "SEQ_COLS_RICH",
+        "hidden": 256,
+        "layers": 3,
+        "loss": "mse",
+        "schedule": "plateau",
+        "y_scale": true,
+        "lr": 0.003,
+        "epochs": 90,
+        "hard_weight": 1.0,
+        "amp": false,
+        "split": {
+          "val_frac": 0.2,
+          "seed": 42
+        },
+        "train_seed": 42
+      },
+      "source": "batch2_results.json E3 best + E5 kfold_nn"
+    },
+    "batch3_e1_screen": {
+      "val_insp_mae": 0.2807616591453552,
+      "hard50_10_mae": 0.3119116723537445,
+      "best_epoch": 72,
+      "recipe": {
+        "name": "baseline",
+        "multitask": false,
+        "residual": false,
+        "augment": "none",
+        "hybrid_physics": false,
+        "epochs": 75,
+        "lr": 0.003,
+        "loss": "mse"
+      },
+      "split": {
+        "val_frac": 0.2,
+        "seed": 42
+      },
+      "train_amp": true
+    },
+    "known_deltas_vs_batch2_holdout": {
+      "holdout_mae": 0.041829079389572144,
+      "hard50_10_mae": 0.047304511070251465
+    },
+    "fairness_notes": [
+      "Holdout split should match Batch 2 if val_frac=0.2 and split_seed=42 (breath_split).",
+      "Batch 3 e1 uses epochs=75 and AMP; Batch 2 finalist holdout used epochs=90 and no AMP.",
+      "OOF 0.2506 is GroupKFold on full train; screening holdout is a single 80/20 split.",
+      "Use batch3 replay (no AMP, 90 ep) below for apples-to-apples holdout check."
+    ]
+  },
+  "cv_plan": {
+    "result_type": "PLAN",
+    "n_configs": 6,
+    "configs": [
+      "e1_baseline",
+      "e2_multitask",
+      "e3_aug_none",
+      "e3_aug_uin",
+      "e4_residual",
+      "e5_hybrid"
+    ],
+    "n_folds": 5,
+    "seeds_per_config": [
+      42
+    ],
+    "estimated_training_runs": 30,
+    "note": "Phase 2 runs only after --run-cv-approved; multi-seed via --multi-seed-final <key>"
+  },
+  "approval": {
+    "cv_approved": true
+  }
+}

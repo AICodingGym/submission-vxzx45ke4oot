@@ -1,0 +1,41 @@
+with tpu_strategy.scope():
+    
+    VERBOSE = 0
+    test_preds = []
+    kf = KFold(n_splits=7, shuffle=True, random_state=2021)
+    
+    for fold, (train_idx, test_idx) in enumerate(kf.split(train, targets)):
+        X_train, X_valid = train[train_idx], train[test_idx]
+        y_train, y_valid = targets[train_idx], targets[test_idx]
+        
+        model = dnn_model()
+        model.compile(optimizer="adam", loss="mae")
+
+        lr = ReduceLROnPlateau(monitor="val_loss", factor=0.85, 
+                               patience=7, verbose=VERBOSE)
+        
+        save_locally = tf.saved_model.SaveOptions(experimental_io_device='/job:localhost')
+        chk_point = ModelCheckpoint(f'./Bidirect_LSTM_model_2021_{fold+1}C.h5', options=save_locally, 
+                                    monitor='val_loss', verbose=VERBOSE, 
+                                    save_best_only=True, mode='min')
+
+        es = EarlyStopping(monitor="val_loss", patience=30, 
+                           verbose=VERBOSE, mode="min", 
+                           restore_best_weights=True)
+        
+        model.fit(X_train, y_train, 
+                  validation_data=(X_valid, y_valid), 
+                  epochs=300,
+                  verbose=VERBOSE,
+                  batch_size=BATCH_SIZE, 
+                  callbacks=[lr, chk_point, es])
+        
+        load_locally = tf.saved_model.LoadOptions(experimental_io_device='/job:localhost')
+        model = load_model(f'./Bidirect_LSTM_model_2021_{fold+1}C.h5', options=load_locally)
+        
+        y_true = y_valid.squeeze().reshape(-1, 1)
+        y_pred = model.predict(X_valid, batch_size=BATCH_SIZE).squeeze().reshape(-1, 1)
+        score = mean_absolute_error(y_true, y_pred)
+        print(f"Fold-{fold+1} | OOF Score: {score}")
+        
+        test_preds.append(model.predict(test, batch_size=BATCH_SIZE).squeeze().reshape(-1, 1).squeeze())

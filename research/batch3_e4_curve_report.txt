@@ -1,0 +1,36 @@
+Batch 3 — e4_residual screening curve review
+================================================
+
+Metric parity (e4 vs e3_aug_uin / e1)
+- Inspiratory holdout MAE: insp_mae() on u_out==0, unscaled pressure.
+- Split: breath holdout val_frac=0.2, split_seed=42, train_seed=42 (identical).
+- Loss: masked MSE (insp-weighted training); selection metric = val insp MAE.
+- AMP: enabled (same train_model path as other screens).
+- Recipe diff: ResidualBiLSTM, max_epochs=85 (others 75); plateau LR patience=12 default.
+
+Logged val curve (NOT final screen score — train_model uses best checkpoint):
+  ep  1: 1.2129
+  ep 10: 0.5679
+  ep 20: 0.5017
+  ep 30: 0.4275
+  ep 40: 0.5215  (regression)
+  ep 50: 0.3869
+  ep 60: 0.3709
+  ep 70: 0.3602  **best logged val**
+  ep 80: 0.4137  (overfitting / noise)
+
+Screen leader at comparable time: e3_aug_uin final 0.2616 (hard 0.2837).
+
+Gap at ep 70: 0.3602 - 0.2616 = 0.0986 (> 0.05 prune threshold after ep 30).
+
+Improvement ep 50→70: 0.3869 → 0.3602 (0.0267 over 20 epochs) — slow; ep 80 worsened.
+
+Final screen (best checkpoint, not last epoch): val=0.3370 at ep 83
+(hard 0.4002). Still +0.075 vs e3_aug_uin 0.2616 — not competitive.
+Run completed epochs 1–85 then saved best weights; process was interrupted
+starting e5_hybrid (adaptive stop not active on this run).
+
+Conclusion: Cannot plausibly catch leader; plateaued short of u_in aug.
+
+Action: record e4 with stopping_reason=pruned_far_from_leader; flag less_than_full_budget;
+borderline rerun NOT requested (gap too large).

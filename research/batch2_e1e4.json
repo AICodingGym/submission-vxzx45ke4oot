@@ -1,0 +1,18 @@
+{
+  "e1": {
+    "winner": {
+      "label": "scaled_mse_lr1e2_wide",
+      "y_scale": true,
+      "loss": "mse",
+      "lr": 0.01,
+      "train_mae": 0.4682,
+      "best_epoch": 149
+    },
+    "memorized": false,
+    "note": "Target scale + high LR helped vs raw MAE (~0.70) but did not reach near-zero. Cosine decay may have limited further fit."
+  },
+  "e4": {
+    "n_hard": 12264,
+    "summary": "R50C10: low u_in, high |dP|, weak corr(u,P)=0.016, strong corr(V/C,P)=0.824, huge vol_r/c; linear residual MAE 4.03 vs 1.04 easy. Late MAE 1.47 vs 0.94 other; slight underprediction bias."
+  }
+}

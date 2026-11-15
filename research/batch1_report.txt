@@ -1,0 +1,50 @@
+========================================================================
+BATCH 1 EXPERIMENTS
+torch cuda=True device=NVIDIA GeForce RTX 4060 Laptop GPU
+subsample breaths train/val: 20000/5000
+========================================================================
+actual breaths train/val: 20000/5000
+Engineering features...
+feature eng sec=3.3
+
+--- E0: ARX baseline on same subsample split ---
+E0 ARX MAE=2.9138
+
+--- E1: LightGBM history features (insp-weighted) ---
+E1 MAE=0.8556 best_iter=400
+
+--- E2: loss-mask ablation for LightGBM ---
+E2a all-phase MAE=0.9226
+E2b insp-rows-only MAE=6.8436
+Best tree so far: E1 MAE=0.8556
+
+--- E3: BiLSTM sequence model (GPU) ---
+E3a BiLSTM insp-masked loss MAE=1.0696
+E3b BiLSTM all-timestep loss MAE=1.1932
+
+--- E4: snap predictions to pressure lattice ---
+E4 tree: raw=0.8556 nearest_unique=0.8551 step_round=0.8553
+E4 bilstm: raw=1.0696 nearest_unique=1.0694 step_round=1.0694
+
+--- E5: physics features for LightGBM ---
+E5a base feats MAE=0.8556 scheme=insp_weighted
+E5b phys feats MAE=0.8505 scheme=insp_weighted
+
+--- Complementarity probe (mean ensemble) ---
+Ensemble mean MAE=0.8804 (tree=0.8556, lstm=1.0696) err_corr=0.6534
+
+========================================================================
+BATCH 1 SUMMARY (inspiratory MAE, same subsample split)
+========================================================================
+  0.8505  E5b_phys
+  0.8556  E1_lgbm_insp_w
+  0.8556  E5a_base
+  0.8804  ens_tree_lstm
+  0.9226  E2a_lgbm_all_phase
+  1.0696  E3a_bilstm_insp_loss
+  1.1932  E3b_bilstm_all_loss
+  2.9138  E0_arx
+  6.8436  E2b_lgbm_insp_rows
+
+Best this batch: E5b_phys = 0.8505
+Elapsed sec: 738.6

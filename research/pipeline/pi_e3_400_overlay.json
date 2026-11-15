@@ -1,0 +1,17 @@
+{
+  "status": "done",
+  "n_breaths_attempted": 400,
+  "n_identified": 13,
+  "insp_coverage_pct": 3.044303275307318,
+  "mae_trusted": 0.0005718597231319335,
+  "nn_insp_mae": 0.27990135124892,
+  "hybrid_insp_mae": 0.27167895391292907,
+  "delta_vs_nn": 0.00822239733599095,
+  "hard_nn": 0.2747085699410216,
+  "hard_hybrid": 0.2747085699410216,
+  "med_ms_per_breath": 6.992936134338379,
+  "runtime_sec": 2.62947154045105,
+  "p0_k": 80,
+  "unique_tol": 0.001,
+  "nn_source": "C:\\Users\\argsw\\Downloads\\dsc102\\ventilator-pressure-prediction\\research\\pipeline\\e3_oof_as_pred.npz"
+}

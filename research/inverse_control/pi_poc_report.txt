@@ -1,0 +1,11 @@
+INVERSE P (tight unique-P) + PI PoC
+unique_tol=0.001 T=0.5
+unique pressures in train: 950
+P-tight TRAIN: 20/960 breaths ok (≥8 unique hits and MAE<0.5); mean r2=0.430
+P-tight VAL oracle: {'insp_coverage_pct': 12.534284147010423, 'n_trusted': 914, 'n_insp': 7292, 'mae_trusted': 7.1828948062565985, 'hybrid_mean_fallback_mae': 7.439793580557112}
+P-tight VAL u_in-only: {'insp_coverage_pct': 2.029621503017005, 'n_trusted': 148, 'n_insp': 7292, 'mae_trusted': 0.11875362408783785, 'hybrid_mean_fallback_mae': 7.279030177814752}
+PI complexity: n_p0=53 × 20 × 20 × 6 /breath; val breaths=80 (vectorized over p_star → 21200 loops/breath)
+PI oracle TRAIN: 26/320 breaths MAE<0.15; mean MAE among ok=0.0372
+PI VAL oracle: {'insp_coverage_pct': 15.854665565648224, 'n_trusted': 384, 'n_insp': 2422, 'mae_trusted': 0.10874863128125001, 'hybrid_mean_fallback_mae': 6.005180366485264}
+PI VAL u_in-only (7/80 breaths): {'insp_coverage_pct': 8.464079273327828, 'n_trusted': 205, 'n_insp': 2422, 'mae_trusted': 0.0013717491804878074, 'hybrid_mean_fallback_mae': 6.587679399115339}
+PI val loop sec=506.2

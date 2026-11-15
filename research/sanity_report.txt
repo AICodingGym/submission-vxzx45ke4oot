@@ -1,0 +1,372 @@
+SANITY CHECK (post Batch 1) — not a new batch
+cuda=True NVIDIA GeForce RTX 4060 Laptop GPU
+========================================================================
+A) INSP-ROWS-ONLY DIAGNOSIS
+========================================================================
+Sample breath 1: insp steps=30
+u_in_backcum on insp rows matches FULL-breath engineering (not recomputed on filter): True
+insp_len constant on breath and equals first u_out=1 index: True
+Conclusion on feature timing: Batch1 computed add_features on full breaths, then filtered rows.
+So the 6.84 result was NOT caused by computing lags/cumsum after filtering.
+
+Re-runs (features always from full-breath engineering):
+  [insp_rows + earlystop_ALL (batch1 path)] stop_on=all rounds_cap=400 chosen_iter=1 booster_best=1 insp_mae=6.8436 sec=1.8
+  [insp_rows + earlystop_INSP] stop_on=insp rounds_cap=400 chosen_iter=400 booster_best=400 insp_mae=0.8412 sec=12.5
+  [insp_rows + fixed 400 (no earlystop)] stop_on=none rounds_cap=400 chosen_iter=400 booster_best=0 insp_mae=0.8412 sec=12.2
+  [all_rows + insp_weight + earlystop_INSP] stop_on=insp rounds_cap=400 chosen_iter=400 booster_best=400 insp_mae=0.8556 sec=191.5
+  [all_rows equal + earlystop_INSP] stop_on=insp rounds_cap=400 chosen_iter=400 booster_best=400 insp_mae=0.9226 sec=22.9
+
+========================================================================
+B) BiLSTM PIPELINE / CAPACITY CHECKS
+========================================================================
+device=cuda
+train breath lengths unique=[80] (expect [80])
+any breath not sorted by time_step? False
+reshape alignment vs dataframe for breath 1: True
+u_out mask insp count per breath mean=30.36
+inputs normalized? YES (Batch1 applied (x-mean)/std). mean[:3]=[ 7.3088636   0.62040377 27.06575   ] std[:3]=[13.4054785   0.48528644 19.601631  ]
+
+B1) Overfit test on ~500 breaths (train MAE should approach ~0)
+  overfit epoch=1 train_insp_mae=15.5895
+  overfit epoch=10 train_insp_mae=4.0645
+  overfit epoch=20 train_insp_mae=2.6401
+  overfit epoch=30 train_insp_mae=2.1101
+  overfit epoch=40 train_insp_mae=1.7852
+  overfit epoch=50 train_insp_mae=1.6247
+  overfit epoch=60 train_insp_mae=1.4834
+  overfit epoch=70 train_insp_mae=1.3528
+  overfit epoch=80 train_insp_mae=1.2249
+Overfit final train insp MAE=1.2249 (SUSPICIOUS — likely bug or capacity issue)
+
+B2) Train vs val curves on 20k/5k (longer, patient schedule)
+  ep=01 train=3.2878 val=3.3095 lr=9.98e-04
+  ep=05 train=1.8124 val=1.8378 lr=9.62e-04
+  ep=10 train=1.3574 val=1.3913 lr=8.54e-04
+  ep=15 train=1.2741 val=1.3078 lr=6.91e-04
+  ep=20 train=1.0806 val=1.1046 lr=5.00e-04
+  ep=25 train=0.9329 val=0.9517 lr=3.09e-04
+  ep=30 train=0.9070 val=0.9239 lr=1.46e-04
+  ep=35 train=0.8420 val=0.8654 lr=3.81e-05
+  ep=40 train=0.8310 val=0.8554 lr=0.00e+00
+At epoch 15: train=1.2741 val=1.3078
+At epoch 20: train=1.0806 val=1.1046
+Best in 40 epochs: ep=39 val=0.8528
+Val still improving after epoch 20? best_ep=39 => True
+
+========================================================================
+C) FULL-DATA BiLSTM WITH PATIENT SCHEDULE
+========================================================================
+full split breaths train/val=54324/13581
+Feature engineering on all breaths...
+  full ep=01 train=3.4150 val=3.4356 lr=1.60e-04
+  full ep=02 train=2.0088 val=2.0357 lr=3.20e-04
+  full ep=04 train=1.5238 val=1.5421 lr=6.40e-04
+  full ep=06 train=1.1960 val=1.2078 lr=7.99e-04
+  full ep=08 train=1.0858 val=1.1021 lr=7.94e-04
+  full ep=10 train=0.9005 val=0.9197 lr=7.84e-04
+  full ep=12 train=0.8448 val=0.8587 lr=7.69e-04
+  full ep=14 train=0.8297 val=0.8373 lr=7.49e-04
+  full ep=16 train=0.8593 val=0.8780 lr=7.25e-04
+  full ep=18 train=0.6950 val=0.7149 lr=6.96e-04
+  full ep=20 train=0.7154 val=0.7360 lr=6.64e-04
+  full ep=22 train=0.6256 val=0.6478 lr=6.28e-04
+  full ep=24 train=0.6589 val=0.6797 lr=5.89e-04
+  full ep=26 train=0.6155 val=0.6385 lr=5.48e-04
+  full ep=28 train=0.6239 val=0.6401 lr=5.05e-04
+  full ep=30 train=0.6008 val=0.6248 lr=4.61e-04
+  full ep=32 train=0.4989 val=0.5221 lr=4.16e-04
+  full ep=34 train=0.4879 val=0.5159 lr=3.71e-04
+  full ep=36 train=0.4979 val=0.5222 lr=3.27e-04
+  full ep=38 train=0.4806 val=0.5031 lr=2.83e-04
+  full ep=40 train=0.4652 val=0.4943 lr=2.41e-04
+  full ep=42 train=0.4165 val=0.4460 lr=2.01e-04
+  full ep=44 train=0.3944 val=0.4250 lr=1.64e-04
+  full ep=46 train=0.4092 val=0.4388 lr=1.30e-04
+  full ep=48 train=0.3801 val=0.4123 lr=9.92e-05
+  full ep=50 train=0.3696 val=0.4029 lr=7.27e-05
+  full ep=52 train=0.3536 val=0.3888 lr=5.05e-05
+  full ep=54 train=0.3457 val=0.3800 lr=3.30e-05
+  full ep=56 train=0.3425 val=0.3768 lr=2.03e-05
+  full ep=58 train=0.3401 val=0.3753 lr=1.26e-05
+  full ep=60 train=0.3395 val=0.3747 lr=1.00e-05
+Full BiLSTM best val insp MAE=0.3747 at ep=60 train_at_best=0.3395 sec=918.9
+Best near end of training (still improving / undertrained signal)? True
+
+========================================================================
+D) ERROR ANALYSIS — best LightGBM (phys feats, insp-weighted)
+========================================================================
+  [best_lgbm_phys_for_errors] stop_on=insp rounds_cap=500 chosen_iter=500 booster_best=500 insp_mae=0.8191 sec=243.1
+Overall val insp MAE=0.8191
+
+MAE by (R,C):
+           mean    median  count
+R  C                            
+5  10  0.683514  0.452969  17003
+   20  0.603923  0.380168  16232
+   50  0.321221  0.236475  16812
+20 10  0.830639  0.558833  11104
+   20  0.649787  0.461568  11530
+   50  0.636781  0.395654  16954
+50 10  1.249747  0.760970  28477
+   20  0.996598  0.680054  16789
+   50  1.045803  0.706737  16912
+
+MAE by inspiratory step (selected):
+  step 00: 0.3483
+  step 05: 0.6442
+  step 10: 0.8157
+  step 15: 0.8983
+  step 20: 0.9609
+  step 25: 0.9650
+  step 30: 1.0561
+  step 01: 0.3188
+  step 02: 0.3847
+  step 29: 1.0615
+  step 30: 1.0561
+  step 31: 1.2084
+
+Top 15 worst breaths:
+                mae   R   C  insp_len  u_in_mean    u_in_max   u_in_std  pressure_max  pressure_min  pressure_range  du_abs_mean
+breath_id                                                                                                                       
+26671      8.087612  50  10        31   7.279505    8.989551   2.188326     36.208019      5.626585       30.581433     0.399570
+28969      6.641778  50  10        30   7.551124   13.296337   4.498960     34.801976      4.290845       30.511131     0.886422
+73518      6.138981  50  10        30   8.530424   16.495594   3.904382     43.519442      5.907794       37.611648     1.035138
+98763      6.121994  50  10        32   6.155970   19.404110   4.849947     18.491878      6.189002       12.302875     1.117012
+118115     5.688032  50  10        29   7.651418    9.186851   1.754155     23.975445      3.306614       20.668831     0.432462
+114076     5.391555  50  10        32   5.485399    9.381517   1.773572     32.271098      5.345377       26.925722     0.681039
+18669      5.015753  50  10        32   5.795932    9.419010   1.980888     34.309861      5.626585       28.683275     0.699918
+36834      4.829271  50  10        30   7.490013   10.125327   3.204443     32.200796      5.837492       26.363305     1.068056
+20116      4.775380  50  10        32   5.638556   20.979885   6.792894     17.859159      3.587823       14.271336     1.311243
+121904     4.774268  50  10        30   9.029351   31.574621  10.264280     21.936683      1.549061       20.387622     2.163250
+12395      4.607188  50  10        30   5.751199    7.228834   1.628821     30.865055      2.814499       28.050556     0.309891
+91939      4.519639  50  10        32   7.505914   10.022295   2.949340     23.694237      3.798729       19.895507     0.828327
+21936      4.472236  50  10        30   5.866153    9.184481   2.211430     17.718554      0.775737       16.942817     0.633156
+74069      4.466816  50  10        30   8.969718   28.312197  10.190909     22.358496      1.408457       20.950039     1.924813
+116894     4.259474  50  10        30  12.255249  100.000000  24.877882     27.631157      1.549061       26.082096    17.430464
+
+Worst-200 vs rest — means:
+  R: worst=43.475 rest=26.466
+  C: worst=17.000 rest=26.767
+  u_in_mean: worst=9.828 rest=14.686
+  u_in_max: worst=31.809 rest=35.687
+  u_in_std: worst=7.896 rest=9.353
+  pressure_max: worst=27.558 rest=24.245
+  pressure_range: worst=23.099 rest=18.573
+  du_abs_mean: worst=3.446 rest=4.250
+  insp_len: worst=30.530 rest=30.356
+
+Worst-200 (R,C) distribution:
+C    10  20  50
+R              
+5     7  10   0
+20   15   0   3
+50  125  14  26
+
+All breaths (R,C) distribution:
+C    10   20   50
+R                
+5   566  526  566
+20  366  385  571
+50  932  541  547
+
+========================================================================
+SANITY SUMMARY
+========================================================================
+{
+  "insp_rows": {
+    "feature_timing_ok_full_then_filter": true,
+    "used_full_backcum_not_recomputed": true,
+    "insp_rows_earlystop_all": 6.843599119932365,
+    "insp_rows_earlystop_insp": 0.841156855327257,
+    "insp_rows_fixed400": 0.841156855327257,
+    "insp_weighted_earlystop_insp": 0.8556134665364393,
+    "all_phase_earlystop_insp": 0.9225553875754052,
+    "bug_iters": {
+      "all_es": 1,
+      "insp_es": 400,
+      "fixed": 400
+    }
+  },
+  "bilstm_sub": {
+    "align_ok": true,
+    "normalized": true,
+    "overfit_train_mae": 1.224934458732605,
+    "best_val": 0.8528144955635071,
+    "best_epoch": 39,
+    "ep15": {
+      "epoch": 15,
+      "train_insp_mae": 1.2741010189056396,
+      "val_insp_mae": 1.3078244924545288,
+      "lr": 0.0006913417161825447
+    },
+    "ep20": {
+      "epoch": 20,
+      "train_insp_mae": 1.0805646181106567,
+      "val_insp_mae": 1.1045500040054321,
+      "lr": 0.0004999999999999999
+    }
+  },
+  "bilstm_sub_curve_tail": [
+    {
+      "epoch": 36,
+      "train_insp_mae": 0.8353149890899658,
+      "val_insp_mae": 0.8603925704956055,
+      "lr": 2.447174185242322e-05
+    },
+    {
+      "epoch": 37,
+      "train_insp_mae": 0.831578254699707,
+      "val_insp_mae": 0.8567750453948975,
+      "lr": 1.3815039801161714e-05
+    },
+    {
+      "epoch": 38,
+      "train_insp_mae": 0.8313177824020386,
+      "val_insp_mae": 0.8562214970588684,
+      "lr": 6.155829702431168e-06
+    },
+    {
+      "epoch": 39,
+      "train_insp_mae": 0.8290293216705322,
+      "val_insp_mae": 0.8528144955635071,
+      "lr": 1.5413331334360176e-06
+    },
+    {
+      "epoch": 40,
+      "train_insp_mae": 0.8309540152549744,
+      "val_insp_mae": 0.8554324507713318,
+      "lr": 0.0
+    }
+  ],
+  "bilstm_full": {
+    "best_val": 0.37468037009239197,
+    "best_epoch": 60,
+    "train_at_best": 0.33948320150375366,
+    "n_train": 54324,
+    "n_val": 13581,
+    "feat_dim": 15
+  },
+  "bilstm_full_curve_tail": [
+    {
+      "epoch": 52,
+      "train": 0.3536250591278076,
+      "val": 0.38882747292518616,
+      "lr": 5.05276206669135e-05
+    },
+    {
+      "epoch": 54,
+      "train": 0.3457162380218506,
+      "val": 0.3799667954444885,
+      "lr": 3.2971476362387775e-05
+    },
+    {
+      "epoch": 56,
+      "train": 0.3424760699272156,
+      "val": 0.37675216794013977,
+      "lr": 2.026529280777828e-05
+    },
+    {
+      "epoch": 58,
+      "train": 0.3401283323764801,
+      "val": 0.3752843737602234,
+      "lr": 1.2574714537322663e-05
+    },
+    {
+      "epoch": 60,
+      "train": 0.33948320150375366,
+      "val": 0.37468037009239197,
+      "lr": 1e-05
+    }
+  ],
+  "error_analysis": {
+    "overall_mae": 0.8190604898153158,
+    "by_rc": [
+      {
+        "R": 5,
+        "C": 10,
+        "mean": 0.6835135815966527,
+        "median": 0.4529691756846894,
+        "count": 17003
+      },
+      {
+        "R": 5,
+        "C": 20,
+        "mean": 0.6039232647614596,
+        "median": 0.38016820171791643,
+        "count": 16232
+      },
+      {
+        "R": 5,
+        "C": 50,
+        "mean": 0.32122097885182194,
+        "median": 0.23647504855244428,
+        "count": 16812
+      },
+      {
+        "R": 20,
+        "C": 10,
+        "mean": 0.8306391787227826,
+        "median": 0.5588333209843572,
+        "count": 11104
+      },
+      {
+        "R": 20,
+        "C": 20,
+        "mean": 0.6497868150904725,
+        "median": 0.461567918761582,
+        "count": 11530
+      },
+      {
+        "R": 20,
+        "C": 50,
+        "mean": 0.6367810847535931,
+        "median": 0.3956540607131913,
+        "count": 16954
+      },
+      {
+        "R": 50,
+        "C": 10,
+        "mean": 1.2497473773738423,
+        "median": 0.7609701486719311,
+        "count": 28477
+      },
+      {
+        "R": 50,
+        "C": 20,
+        "mean": 0.9965977899620244,
+        "median": 0.6800543191056523,
+        "count": 16789
+      },
+      {
+        "R": 50,
+        "C": 50,
+        "mean": 1.045802796345147,
+        "median": 0.7067371178978572,
+        "count": 16912
+      }
+    ],
+    "worst_means": {
+      "R": 43.475,
+      "C": 17.0,
+      "u_in_max": 31.808755989229997,
+      "pressure_max": 27.55769105329,
+      "pressure_range": 23.098824420497003,
+      "du_abs_mean": 3.445526465493864
+    },
+    "rest_means": {
+      "R": 26.465625,
+      "C": 26.766666666666666,
+      "u_in_max": 35.68665721671928,
+      "pressure_max": 24.24483426508125,
+      "pressure_range": 18.573079867909538,
+      "du_abs_mean": 4.250126657140633
+    }
+  },
+  "elapsed_sec": 1554.1654636859894
+}
+========================================================================
+B-extra) STRONGER OVERFIT PROBE (500 breaths, rich feats, h=256, L=3)
+========================================================================
+MAE loss 150ep: best observed train_insp_mae ~0.46 (final 0.5136)
+MSE loss 150ep: final train_insp_mae 0.6169
+Neither reaches near-zero; no evidence of label/mask misalignment given full-data success.
