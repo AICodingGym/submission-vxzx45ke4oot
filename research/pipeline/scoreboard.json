@@ -61,14 +61,15 @@
       "min_frac": 0.55
     },
     "full_hybrid": {
-      "status": "q0_tau",
-      "protocol": "GroupKFold OOF + q0 PI",
-      "tau": 5.0,
-      "hybrid": 0.1570298843091087,
-      "cov": 31.201228756470904,
-      "mae_trusted": 0.0056779995634618375,
-      "hard": 0.16831325583619336,
-      "ensemble_snap": 0.2384087610088048
+      "status": "q0_plus_P",
+      "oof": 0.14927280181439606,
+      "prev_lb": 0.13884
     }
+  },
+  "official_lb": {
+    "previous": 0.20624,
+    "q0_tau5": 0.13884,
+    "oof_hybrid": 0.15703,
+    "date": "2026-11-15"
   }
 }
